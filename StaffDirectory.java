@@ -28,6 +28,15 @@ public class StaffDirectory {
 		return -1;
 	}
 	
+	public String getStaffName(int inputID) {
+		for(int i=0; i<STAFF_COUNT; i++) {
+			if(staffList[i].getStaffID() == inputID) {
+				return staffList[i].getName();
+			} 
+		}
+		return "NA";
+	}
+	
 	public static void displayStaff(int index) {
 		System.out.println("Name: "+staffList[index].getName());
 		int staffTitle = staffList[index].getTitle();

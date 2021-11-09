@@ -6,19 +6,22 @@ public class RRPSS_App {
 	
 	public static StaffDirectory newStaffList = new StaffDirectory();
 	public static MenuList newMenuList = new MenuList();
-	public static int staffIndex = -1; // to remove if login is removed
+	//public static int staffIndex = -1; // to remove if login is removed
 	public static Table[] restaurant = new Table[10];
+	public static Order[] orders = new Order[10];
 
 	public static void main (String[] args) {
 		
 		for (int i=0; i<10; i++) {
 			restaurant[i] = new Table(i+1,(i+2)%2*2); //2 tables each of size {2,4,6,8,10}
+			orders[i] = new Order(i+1);
 		}
 		
 		System.out.println("Welcome to the RRPSS App! Please input your ID number:");
 		
 		Scanner input = new Scanner(System.in);
 		
+		int staffIndex = -1;
 		//remove login later to be used for order system
 		do { 
 			int userID = input.nextInt();
@@ -55,10 +58,10 @@ public class RRPSS_App {
 				appMenu();
 				break;
 			case 2: //create order
-				appCreateOrder(); //wip
+				appCreateOrder();
 				break;
 			case 3: //view/edit order
-				//wip
+				appViewOrder();
 				break;
 			case 4: //reservation
 				//wip
@@ -66,11 +69,11 @@ public class RRPSS_App {
 			case 5: //table availability
 				System.out.println("Which table do you want to check?");
 				int tempTableNo = input.nextInt();
-				if (restaurant[tempTableNo-1].getStaffID() != 0) System.out.println("Table " + tempTableNo + "is occupied.");
-				else System.out.println("Table " + tempTableNo + "is not occupied.");
+				if (restaurant[tempTableNo-1].getStaffID() != 0) System.out.println("Table " + tempTableNo + " is occupied.");
+				else System.out.println("Table " + tempTableNo + " is not occupied.");
 				break;
 			case 6: //print order invoice
-				//wip
+				appInvoice(); //wip - need to add to items sales report
 				break;
 			case 7: //print sales report
 				//wip
@@ -213,6 +216,7 @@ public class RRPSS_App {
 		
 		System.out.println("Please input your staff ID:");
 		int staffID = -1;
+		int staffIndex = -1;
 		
 		do { 
 			staffID = input.nextInt();
@@ -227,6 +231,7 @@ public class RRPSS_App {
 		restaurant[tableNo-1].createOrder(staffID);
 		
 		String menuName;
+		menuName = input.nextLine(); //clear \n left in input
 		int menuIndex = -1;
 		do {
 			System.out.println("Type the name of the item you want to add. Type Finish to finalise the order");
@@ -234,13 +239,104 @@ public class RRPSS_App {
 			menuName = input.nextLine();
 			if (newMenuList.findIndex(menuName) != -1) {
 				menuIndex = newMenuList.findIndex(menuName);
-				//restaurant[tableNo-1].order[orderQuantity]
+				orders[tableNo-1].menuAdd(newMenuList.getMenuCategory(menuIndex), newMenuList.getMenuName(menuIndex),newMenuList.getMenuDesc(menuIndex),newMenuList.getMenuPrice(menuIndex));				
 			} else if (menuName.compareTo("Finish") != 0){
 			System.out.println("You have inputted an invalid name. Please try again, or type Finish to go back.");
 			}
-		} while (menuIndex == -1 && menuName.compareTo("Finish") != 0);
+		} while (menuName.compareTo("Finish") != 0);
 		
 		appMain();
+	}
+	
+	public static void appViewOrder() {
+		Scanner input = new Scanner(System.in);
 		
+		System.out.println("Which table is this order from?");
+		int tableNo = input.nextInt();
+		
+		int orderChoice;
+		
+		do {
+			System.out.println("(1) View Order");
+			System.out.println("(2) Edit Order");
+			System.out.println("(99) Back to main menu");
+			
+			orderChoice = input.nextInt();
+			switch(orderChoice) {
+			case 1: //view order
+				System.out.println("Table No:"+orders[tableNo-1].getTableNo());
+				int tableStaffID = restaurant[tableNo-1].getStaffID();
+				System.out.println("Staff: "+newStaffList.getStaffName(tableStaffID));
+				orders[tableNo-1].displayMenu();
+				System.out.println("Order Total: "+orders[tableNo-1].orderTotal());
+				break;
+			case 2: //edit order
+				int editOrderChoice;
+				
+				do {
+					System.out.println("(1) Add item");
+					System.out.println("(2) Remove item");
+					System.out.println("(99) Back to order menu");
+					
+					editOrderChoice = input.nextInt();
+					switch(editOrderChoice) {
+					case 1: //add item
+						String menuName;
+						menuName = input.nextLine(); //clear \n left in input
+						int menuIndex = -1;
+						do {
+							System.out.println("Type the name of the item you want to add. Type Finish to finalise the order");
+
+							menuName = input.nextLine();
+							if (newMenuList.findIndex(menuName) != -1) {
+								menuIndex = newMenuList.findIndex(menuName);
+								orders[tableNo-1].menuAdd(newMenuList.getMenuCategory(menuIndex), newMenuList.getMenuName(menuIndex),newMenuList.getMenuDesc(menuIndex),newMenuList.getMenuPrice(menuIndex));				
+							} else if (menuName.compareTo("Finish") != 0){
+							System.out.println("You have inputted an invalid name. Please try again, or type Finish to go back.");
+							}
+						} while (menuName.compareTo("Finish") != 0);
+						break;
+					case 2: //remove item
+						
+						int orderRemoveIndex = -1;
+						String removeName;
+						do {
+							System.out.println("Type the name of the item to be removed");
+							
+							removeName = input.nextLine();
+							if (orders[tableNo-1].findIndex(removeName) != -1) {
+								orderRemoveIndex = orders[tableNo-1].findIndex(removeName);
+								orders[tableNo-1].menuRemove(orderRemoveIndex);
+							} else if (removeName.compareTo("Back") != 0){
+							System.out.println("You have inputted an invalid name. Please try again, or type Finish to go back.");
+							}
+						} while (orderRemoveIndex == -1 && removeName.compareTo("Finish") != 0);
+						
+						if(removeName.compareTo("Finish") != 0) System.out.println("Menu item removed");
+						
+					}
+				} while (editOrderChoice != 99);
+				break;
+			}
+		} while (orderChoice != 99);
+	}
+	
+	public static void appInvoice() {
+		Scanner input = new Scanner(System.in);
+		System.out.println("Which table is this order from?");
+		int tableNo = input.nextInt();
+		
+		System.out.println("Table No:"+orders[tableNo-1].getTableNo());
+		int tableStaffID = restaurant[tableNo-1].getStaffID();
+		System.out.println("Staff: "+newStaffList.getStaffName(tableStaffID));
+		orders[tableNo-1].displayMenu();
+		System.out.println("Order Total: "+orders[tableNo-1].orderTotal());
+		
+		//add to report array
+		
+		orders[tableNo-1] = new Order(tableNo);
+		
+		input.close();
+		appMain();
 	}
 }
