@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class MenuController {
     
-    public static ArrayList<MenuItem> menuItemList = (ArrayList<MenuItem>) PopulateDB.menuItemArrayList.clone();
+    public static ArrayList<MenuItem> menuItemList = PopulateDB.menuItemArrayList;
     
     public static void showMenuItem() {
         List<List<String>> rows = new ArrayList<>();
