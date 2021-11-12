@@ -8,12 +8,12 @@ import helperFunction.*;
 public class MainUI {
 	
 	private static RestaurantController restaurant = new RestaurantController();
-	private static Scanner sc = new Scanner(System.in);
 	
 	public static void main (String[] args) {
 		
 		PopulateDB.populateDB();
 		
+		Scanner sc = new Scanner(System.in);
 		int appChoice = 0;
 		
 		do{
@@ -31,6 +31,6 @@ public class MainUI {
 			
 		} while (appChoice != 99);
 		
-		//sc.close();
+		sc.close();
 	}
 }
