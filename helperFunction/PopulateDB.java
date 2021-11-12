@@ -10,7 +10,7 @@ public class PopulateDB {
 	public static ArrayList<Staff> staffArrayList = new ArrayList<Staff>();
     public static ArrayList<MenuItem> menuItemArrayList = new ArrayList<MenuItem>();
     public static ArrayList<Table> tableArrayList = new ArrayList<Table>();
-    //public static ArrayList<Order> orderArrayList = new ArrayList<Order>();
+    public static ArrayList<Order> orderArrayList = new ArrayList<Order>();
 	
 	public static void populateDB() {
 
@@ -34,17 +34,6 @@ public class PopulateDB {
         staffArrayList.add(emp3);
         staffArrayList.add(emp4);
         staffArrayList.add(emp5);
-/*
-        orderArrayList.add(new Order(emp1,520,new SimpleDateFormat("dd/MM/yyyy").parse("01/03/2021")));
-        orderArrayList.add(new Order(emp2,1520,new SimpleDateFormat("dd/MM/yyyy").parse("01/04/2021")));
-        orderArrayList.add(new Order(emp3,3520,new SimpleDateFormat("dd/MM/yyyy").parse("01/05/2021")));
-        orderArrayList.add(new Order(emp4,5520,new SimpleDateFormat("dd/MM/yyyy").parse("02/06/2021")));
-        orderArrayList.add(new Order(emp5,6520,new SimpleDateFormat("dd/MM/yyyy").parse("02/07/2021")));
-        orderArrayList.add(new Order(emp4,5220,new SimpleDateFormat("dd/MM/yyyy").parse("02/08/2021")));
-        orderArrayList.add(new Order(emp3,7220,new SimpleDateFormat("dd/MM/yyyy").parse("02/09/2021")));
-        orderArrayList.add(new Order(emp2,7220,new SimpleDateFormat("dd/MM/yyyy").parse("02/10/2021")));
-        orderArrayList.add(new Order(emp2,3220,new SimpleDateFormat("dd/MM/yyyy").parse("02/11/2021")));
-*/
 
         Food chicken = new Food("chicken","delicious",4.30, Food.CourseType.MAIN_COURSE);
         Food kangKong = new Food("kang kong","oily",5.00, Food.CourseType.MAIN_COURSE);
@@ -62,5 +51,22 @@ public class PopulateDB {
         meal1.addItem(chicken);
         meal1.addItem(coke);
         menuItemArrayList.add(meal1);
+        
+        orderArrayList.add(new Order(8,1,1));
+        orderArrayList.add(new Order(7,2,2));
+        orderArrayList.add(new Order(10,3,3));
+        orderArrayList.add(new Order(11,5,5));
+        orderArrayList.add(new Order(9,2,8));
+        
+        orderArrayList.get(0).addItem(meal1);
+        orderArrayList.get(0).addItem(coke);
+        orderArrayList.get(0).addItem(sugarCane);
+        orderArrayList.get(1).addItem(meal1);
+        orderArrayList.get(1).addItem(cheeseCake);
+        orderArrayList.get(2).addItem(meal1);
+        orderArrayList.get(3).addItem(meal1);
+        orderArrayList.get(4).addItem(chicken);
+        orderArrayList.get(4).addItem(kangKong);
+        orderArrayList.get(4).addItem(kangKong);
 	}
 }

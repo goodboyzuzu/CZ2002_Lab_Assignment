@@ -19,10 +19,9 @@ public class RestaurantController {
         switch (choice) {
             case 1: //view menu
                 menuUI.showMenuOptions();
-            	//System.out.println("Menu WIP");
                 break;
             case 2:
-                //orderUI.showOrderOptions();
+                orderUI.showOrderOptions();
             	System.out.println("Order WIP");
                 break;
             case 3:

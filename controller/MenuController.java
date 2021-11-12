@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Scanner;
 
 public class MenuController {
-    
-    public static ArrayList<MenuItem> menuItemList = PopulateDB.menuItemArrayList;
-    
-    public static void showMenuItem() {
+	
+	public static ArrayList<MenuItem> menuItemList = PopulateDB.menuItemArrayList;
+	
+	public static void showMenuItem() {
         List<List<String>> rows = new ArrayList<>();
         List<String> header = Arrays.asList("Category", "Name", "Description", "Price", "Course","Food in package");
         rows.add(header);
@@ -32,8 +32,8 @@ public class MenuController {
         }
         System.out.println(formatAsTable(rows));
     }
-    
-    public static void showFoodItem() {
+	
+	public static void showFoodItem() {
         List<List<String>> rows = new ArrayList<>();
         List<String> header = Arrays.asList("Category", "Name", "Description", "Price", "Course");
         rows.add(header);
@@ -46,9 +46,9 @@ public class MenuController {
         }
         System.out.println(formatAsTable(rows));
     }
-    
-    public static void addMenuItem(String foodName, String foodDesc, double foodPrice, int courseIndex) {
-        Food newFood = new Food(foodName, foodDesc, foodPrice, Food.CourseType.values()[courseIndex - 1]);
+	
+	public static void addMenuItem(String foodName, String foodDesc, double foodPrice, int courseIndex) {
+		Food newFood = new Food(foodName, foodDesc, foodPrice, Food.CourseType.values()[courseIndex - 1]);
         boolean contains = false;
         for (MenuItem item : menuItemList) {
             if (item.getName() == foodName)
@@ -57,28 +57,28 @@ public class MenuController {
         if (contains == false) {
             menuItemList.add(newFood);
         } else System.out.println("Item is already in the menu");
-    }
-    
-    public static void addPackage(String packageName, String packageDesc, double packagePrice) {
-        Scanner sc = new Scanner(System.in);
-        
-        PromotionalPackage promo = new PromotionalPackage(packageName, packageDesc, packagePrice);
-        System.out.println("Enter name of food to add. Enter \"quit\" to end");
-        showFoodItem();
-        String foodName;
-        do {
-            foodName = sc.nextLine();
-            for (MenuItem item : menuItemList) {
-                if (item.getName().equals(foodName)) {
-                    System.out.println(foodName);
-                    promo.addItem((Food) item);
-                }
-            }
-        } while (!(foodName.equals("quit")));
-        menuItemList.add(promo);
-    }
-    
-    public void removeMenuItem(String menuName){
+	}
+	
+	public static void addPackage(String packageName, String packageDesc, double packagePrice) {
+		Scanner sc = new Scanner(System.in);
+		
+		PromotionalPackage promo = new PromotionalPackage(packageName, packageDesc, packagePrice);
+	    System.out.println("Enter name of food to add. Enter \"quit\" to end");
+	    showFoodItem();
+	    String foodName;
+	    do {
+	        foodName = sc.nextLine();
+	        for (MenuItem item : menuItemList) {
+	            if (item.getName().equals(foodName)) {
+	            	System.out.println(foodName);
+	                promo.addItem((Food) item);
+	            }
+	        }
+	    } while (!(foodName.equals("quit")));
+	    menuItemList.add(promo);
+	}
+	
+	public static void removeMenuItem(String menuName){
         for(Iterator<MenuItem> it = menuItemList.iterator(); it.hasNext();){
             MenuItem menuItem = it.next();
             if((menuItem.getName()).equals(menuName)){
@@ -87,146 +87,146 @@ public class MenuController {
             }
         }
     }
-    
-    public static void editMenuItem(String menuName) {
-        Scanner sc = new Scanner(System.in);
-        boolean contains = false;
-        for (MenuItem item : menuItemList) {
-            if((item.getName()).equals(menuName)){
-                contains = true;
-                
-                List<List<String>> rows = new ArrayList<>();
-                List<String> header = Arrays.asList("Category", "Name", "Description", "Price", "Course", "Food in Package");
-                rows.add(header);
-                
+	
+	public static void editMenuItem(String menuName) {
+		Scanner sc = new Scanner(System.in);
+		boolean contains = false;
+		for (MenuItem item : menuItemList) {
+			if((item.getName()).equals(menuName)){
+				contains = true;
+				
+				List<List<String>> rows = new ArrayList<>();
+		        List<String> header = Arrays.asList("Category", "Name", "Description", "Price", "Course", "Food in Package");
+		        rows.add(header);
+		        
                 int choice = 0;
                 int index = menuItemList.indexOf(item);
-                if (item instanceof Food) {
-                    do {
-                        rows.add(Arrays.asList("Food", item.getName(), item.getDesc(), String.valueOf(item.getPrice()), String.valueOf(((Food)item).getCourseType()),"-"));
-                        System.out.println(formatAsTable(rows));
-                        
-                        System.out.println("Which attribute do you want edit?");
-                        System.out.println("(1) Name");
-                        System.out.println("(2) Description");
-                        System.out.println("(3) Price");
-                        System.out.println("(4) Course Type");
-                        System.out.println("(99) Go Back");
-                        
-                        choice = sc.nextInt();
-                        sc.nextLine();
-                        
-                        switch(choice) {
-                        case 1:
-                            System.out.println("Enter the new name");
-                            menuItemList.get(index).setName(sc.nextLine());
-                            System.out.println("Name updated");
-                            
-                            rows.remove(1);
-                            break;
-                        case 2:
-                            System.out.println("Enter the new description");
-                            menuItemList.get(index).setDesc(sc.nextLine());
-                            System.out.println("Description updated");
-                            
-                            rows.remove(1);
-                            break;
-                        case 3:
-                            System.out.println("Enter the new price");
-                            menuItemList.get(index).setPrice(sc.nextDouble());
-                            System.out.println("Price updated");
-                            sc.nextLine();
-                            
-                            rows.remove(1);
-                            break;
-                        case 4:
-                            System.out.println("Enter the new course type");
-                            System.out.println("Course type: (1) MAIN_COURSE (2) DESSERT (3) DRINKS");
-                            menuItemList.get(index).setCourseType(sc.nextInt());
-                            System.out.println("Course type updated");
-                            sc.nextLine();
-                            
-                            rows.remove(1);
-                            break;
-                        case 99:
-                            break;
-                        default:
-                            System.out.println("Please input a different number\n");
-                        }
-                        
-                    } while (choice != 99);
-                } else if (item instanceof PromotionalPackage){
-                    do {
-                        rows.add(Arrays.asList("Package", item.getName(), item.getDesc(), String.valueOf(item.getPrice()), "-",((PromotionalPackage)item).getFoodString()));
-                        System.out.println(formatAsTable(rows));
-                        
-                        System.out.println("Which attribute do you want edit?");
-                        System.out.println("(1) Name");
-                        System.out.println("(2) Description");
-                        System.out.println("(3) Price");
-                        System.out.println("(4) Food in Package");
-                        System.out.println("(99) Go Back");
-                        
-                        choice = sc.nextInt();
-                        sc.nextLine();
-                        
-                        switch(choice) {
-                        case 1:
-                            System.out.println("Enter the new name");
-                            menuItemList.get(index).setName(sc.nextLine());
-                            System.out.println("Name updated");
-                            
-                            rows.remove(1);
-                            break;
-                        case 2:
-                            System.out.println("Enter the new description");
-                            menuItemList.get(index).setDesc(sc.nextLine());
-                            System.out.println("Description updated");
-                            
-                            rows.remove(1);
-                            break;
-                        case 3:
-                            System.out.println("Enter the new price");
-                            menuItemList.get(index).setPrice(sc.nextDouble());
-                            System.out.println("Price updated");
-                            sc.nextLine();
-                            
-                            rows.remove(1);
-                            break;
-                        case 4:
-                            PromotionalPackage promo = new PromotionalPackage(menuItemList.get(index).getName(), menuItemList.get(index).getDesc(), menuItemList.get(index).getPrice());
-                            
-                            showFoodItem();
-                        
-                            System.out.println("All items in the package have been reset.");
-                            System.out.println("Enter name of food to add. Enter \"quit\" to end");
-                            
-                            String foodName;
-                            do {
-                                foodName = sc.nextLine();
-                                for (MenuItem food : menuItemList) {
-                                    if (food.getName().equals(foodName)) {
-                                        System.out.println(foodName);
-                                        promo.addItem((Food) food);
-                                    }
-                                }
-                            } while (!(foodName.equals("quit")));
-                            menuItemList.set(index, promo);
-                            
-                            System.out.println("Food in Package updated");
-                            
-                            item = menuItemList.get(index);
-                            rows.remove(1);
-                            break;
-                        case 99:
-                            break;
-                        default:
-                            System.out.println("Please input a different number\n");
-                        }
-                    } while (choice != 99);
-                } 
-            }
-        }
-        if (contains == false) System.out.println("Item not found");
-    }
+				if (item instanceof Food) {
+					do {
+						rows.add(Arrays.asList("Food", item.getName(), item.getDesc(), String.valueOf(item.getPrice()), String.valueOf(((Food)item).getCourseType()),"-"));
+						System.out.println(formatAsTable(rows));
+						
+						System.out.println("Which attribute do you want edit?");
+						System.out.println("(1) Name");
+						System.out.println("(2) Description");
+						System.out.println("(3) Price");
+						System.out.println("(4) Course Type");
+						System.out.println("(99) Go Back");
+						
+						choice = sc.nextInt();
+						sc.nextLine();
+						
+						switch(choice) {
+						case 1:
+							System.out.println("Enter the new name");
+							menuItemList.get(index).setName(sc.nextLine());
+							System.out.println("Name updated");
+							
+							rows.remove(1);
+							break;
+						case 2:
+							System.out.println("Enter the new description");
+							menuItemList.get(index).setDesc(sc.nextLine());
+							System.out.println("Description updated");
+							
+							rows.remove(1);
+							break;
+						case 3:
+							System.out.println("Enter the new price");
+							menuItemList.get(index).setPrice(sc.nextDouble());
+							System.out.println("Price updated");
+							sc.nextLine();
+							
+							rows.remove(1);
+							break;
+						case 4:
+							System.out.println("Enter the new course type");
+							System.out.println("Course type: (1) MAIN_COURSE (2) DESSERT (3) DRINKS");
+							menuItemList.get(index).setCourseType(sc.nextInt());
+							System.out.println("Course type updated");
+							sc.nextLine();
+							
+							rows.remove(1);
+							break;
+						case 99:
+							break;
+						default:
+							System.out.println("Please input a different number\n");
+						}
+						
+					} while (choice != 99);
+				} else if (item instanceof PromotionalPackage){
+					do {
+						rows.add(Arrays.asList("Package", item.getName(), item.getDesc(), String.valueOf(item.getPrice()), "-",((PromotionalPackage)item).getFoodString()));
+						System.out.println(formatAsTable(rows));
+						
+						System.out.println("Which attribute do you want edit?");
+						System.out.println("(1) Name");
+						System.out.println("(2) Description");
+						System.out.println("(3) Price");
+						System.out.println("(4) Food in Package");
+						System.out.println("(99) Go Back");
+						
+						choice = sc.nextInt();
+						sc.nextLine();
+						
+						switch(choice) {
+						case 1:
+							System.out.println("Enter the new name");
+							menuItemList.get(index).setName(sc.nextLine());
+							System.out.println("Name updated");
+							
+							rows.remove(1);
+							break;
+						case 2:
+							System.out.println("Enter the new description");
+							menuItemList.get(index).setDesc(sc.nextLine());
+							System.out.println("Description updated");
+							
+							rows.remove(1);
+							break;
+						case 3:
+							System.out.println("Enter the new price");
+							menuItemList.get(index).setPrice(sc.nextDouble());
+							System.out.println("Price updated");
+							sc.nextLine();
+							
+							rows.remove(1);
+							break;
+						case 4:
+							PromotionalPackage promo = new PromotionalPackage(menuItemList.get(index).getName(), menuItemList.get(index).getDesc(), menuItemList.get(index).getPrice());
+							
+							showFoodItem();
+						
+							System.out.println("All items in the package have been reset.");
+							System.out.println("Enter name of food to add. Enter \"quit\" to end");
+							
+						    String foodName;
+						    do {
+						        foodName = sc.nextLine();
+						        for (MenuItem food : menuItemList) {
+						            if (food.getName().equals(foodName)) {
+						            	System.out.println(foodName);
+						                promo.addItem((Food) food);
+						            }
+						        }
+						    } while (!(foodName.equals("quit")));
+						    menuItemList.set(index, promo);
+							
+							System.out.println("Food in Package updated");
+							
+							item = menuItemList.get(index);
+							rows.remove(1);
+							break;
+						case 99:
+							break;
+						default:
+							System.out.println("Please input a different number\n");
+						}
+					} while (choice != 99);
+				} 
+			}
+		}
+		if (contains == false) System.out.println("Item not found");
+	}
 }

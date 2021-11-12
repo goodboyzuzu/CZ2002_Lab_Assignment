@@ -4,15 +4,21 @@ public class Food extends MenuItem {
 
     public enum CourseType {MAIN_COURSE, DESSERT, DRINKS};
 
-    private CourseType coursetype;
+    private CourseType courseType;
 
-    public Food(String foodName, String desc, double price, CourseType coursetype) {
+    public Food(String foodName, String desc, double price, CourseType courseType) {
         super(foodName,desc,price);
-        this.coursetype = coursetype;
+        this.courseType = courseType;
     }
 
-    public CourseType getCoursetype() {
-        return coursetype;
+    public CourseType getCourseType() {
+        return courseType;
+    }
+    
+    @Override
+    public void setCourseType(int courseTypeInt) {
+    	CourseType courseType = CourseType.values()[courseTypeInt - 1];
+    	this.courseType = courseType;
     }
 
 }

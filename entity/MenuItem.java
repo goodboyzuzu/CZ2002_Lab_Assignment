@@ -1,7 +1,7 @@
 package entity;
 
 public abstract class MenuItem {
-    private String name;
+	private String name;
     private String desc;
     private double price;
 
@@ -24,15 +24,15 @@ public abstract class MenuItem {
     }
     
     public void setName(String name) {
-        this.name=name;
+    	this.name=name;
     }
     
     public void setDesc(String desc) {
-        this.desc=desc;
+    	this.desc=desc;
     }
     
     public void setPrice(double price) {
-        this.price=price;
+    	this.price=price;
     }
     
     public void setCourseType(int courseType) {}

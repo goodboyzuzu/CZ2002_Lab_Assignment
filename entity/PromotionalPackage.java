@@ -3,7 +3,7 @@ package entity;
 import java.util.ArrayList;
 
 public class PromotionalPackage extends MenuItem {
-    private ArrayList<Food> foodArrayList;
+	private ArrayList<Food> foodArrayList;
 
     public PromotionalPackage(String PackageName, String desc, double price){
         super(PackageName,desc,price);
