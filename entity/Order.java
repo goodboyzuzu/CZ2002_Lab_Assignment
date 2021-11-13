@@ -9,6 +9,7 @@ public class Order {
     private int staffId;
     private int tableNo;
     //private Date timestamp = new Date();
+    private double finalTotal; //after GST
     private ArrayList<MenuItem> foodList = new ArrayList<MenuItem>();
     
     public Order(int orderId, int staffId, int tableNo) {
@@ -33,12 +34,16 @@ public class Order {
     //    return timestamp;
     //}
     
+    public double getFinalTotal() {
+        return finalTotal;
+    }
+    
     public ArrayList<MenuItem> getFoodList(){
         return foodList;
     }
     
     public double getTotalPrice() {
-        int totalPrice = 0;
+        double totalPrice = 0;
         for (MenuItem menuItem : foodList) {
             totalPrice += menuItem.getPrice();
         }
@@ -49,14 +54,21 @@ public class Order {
         foodList.add(menuItem);
     }
 
-    public boolean removeItem(String menuItem) {
+    public void removeItem(MenuItem menuItem) {
+        boolean removed = false;
         for(MenuItem item : foodList) {
-            if(item.getName().equals(menuItem)) {
+            if(item.getName().equals(menuItem.getName())) {
                 int index = foodList.indexOf(item);
                 foodList.remove(index);
-                return true;
+                removed = true;
+                break;
             }
         }
-        return false;
+        
+        if(!removed) System.out.println("Item does not exist in order");
+    }
+    
+    public void setFinalTotal(double finalTotal) {
+        this.finalTotal = finalTotal;
     }
 }

@@ -5,12 +5,15 @@ import entity.*;
 //import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import controller.OrderController;
+
 public class PopulateDB {
 	
 	public static ArrayList<Staff> staffArrayList = new ArrayList<Staff>();
     public static ArrayList<MenuItem> menuItemArrayList = new ArrayList<MenuItem>();
     public static ArrayList<Table> tableArrayList = new ArrayList<Table>();
     public static ArrayList<Order> orderArrayList = new ArrayList<Order>();
+    public static ArrayList<Order> pastOrderArrayList = new ArrayList<Order>();
 	
 	public static void populateDB() {
 
@@ -68,5 +71,7 @@ public class PopulateDB {
         orderArrayList.get(4).addItem(chicken);
         orderArrayList.get(4).addItem(kangKong);
         orderArrayList.get(4).addItem(kangKong);
+        
+        OrderController.setOrderID(11);
 	}
 }

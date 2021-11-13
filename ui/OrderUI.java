@@ -16,6 +16,8 @@ public class OrderUI {
             System.out.println("(2) View current orders");
             System.out.println("(3) Add items to order");
             System.out.println("(4) Remove items from order");
+            System.out.println("(5) Print order invoice");
+            System.out.println("(6) Print sales report");
             System.out.println("(99) Go back to main menu");
             
             orderChoice = sc.nextInt();
@@ -32,6 +34,13 @@ public class OrderUI {
                 break;
             case 4:
                 removeFromOrder();
+                break;
+            case 5:
+                printOrderInvoice();
+                break;
+            case 6:
+                System.out.println("Sales report not available");
+                //create reportUI and reportController?
                 break;
             case 99:
                 break;
@@ -63,10 +72,38 @@ public class OrderUI {
     }
     
     private void addToOrder() {
+        Scanner sc = new Scanner(System.in);
         
+        System.out.println("Tables with order:");
+        orderCtrl.viewOrderedTables();
+        
+        System.out.println("Which table's order do you want to add items to?");
+        orderCtrl.addToOrder(sc.nextInt());
     }
     
     private void removeFromOrder() {
+        Scanner sc = new Scanner(System.in);
         
+        System.out.println("Tables with order:");
+        orderCtrl.viewOrderedTables();
+        
+        System.out.println("Which table's order do you want to remove items from?");
+        orderCtrl.removeFromOrder(sc.nextInt());
+    }
+    
+    private void printOrderInvoice() {
+        Scanner sc = new Scanner(System.in);
+        
+        System.out.println("Tables with order:");
+        orderCtrl.viewOrderedTables();
+        
+        System.out.println("Which table do you want to print the invoice for?");
+        int tableNo = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Is the customer a member? (Y/N)");
+        String isMember = sc.nextLine();
+        
+        if (isMember.trim().equals("Y")) orderCtrl.printOrderInvoice(tableNo, true);
+        else orderCtrl.printOrderInvoice(tableNo, false);
     }
 }

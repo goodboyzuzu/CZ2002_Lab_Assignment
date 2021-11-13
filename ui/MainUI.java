@@ -22,8 +22,7 @@ public class MainUI {
 			System.out.println("(1) Menu Options");
 			System.out.println("(2) Order Options");
 			System.out.println("(3) Reservation Options");
-			System.out.println("(4) Print order invoice");
-			System.out.println("(5) Print sales report");
+			System.out.println("(4) Print sales report");
 			System.out.println("(99) Quit");
 			
 			appChoice = sc.nextInt();

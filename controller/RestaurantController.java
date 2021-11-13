@@ -17,12 +17,11 @@ public class RestaurantController {
 	public void chooseFunction(int choice) {
 
         switch (choice) {
-            case 1: //view menu
+            case 1:
                 menuUI.showMenuOptions();
                 break;
             case 2:
                 orderUI.showOrderOptions();
-            	System.out.println("Order WIP");
                 break;
             case 3:
                 //reservationUI.showReservationOptions();
