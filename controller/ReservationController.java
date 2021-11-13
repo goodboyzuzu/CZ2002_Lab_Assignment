@@ -80,16 +80,21 @@ public class ReservationController {
 	}
 	
 	public static void removeReservationItem(int contact){
+		boolean contains = false;
 		for(Iterator<Reservation> it = reservationArrayList.iterator(); it.hasNext();){
-        	Reservation reservationItem = it.next();
-            if(reservationItem.getContactNumber()==contact){
-            	String removed_name=reservationItem.getName();
-            	String removed_contact=String.valueOf(reservationItem.getContactNumber());
-            	reservationItem.getTable().setVacant(true);
-                it.remove();
-                System.out.println("Reservation for "+removed_name +" with contact: "+removed_contact+" has been removed");
-            }
-        }
+        	    Reservation reservationItem = it.next();
+		    if(reservationItem.getContactNumber()==contact){
+			String removed_name=reservationItem.getName();
+			String removed_contact=String.valueOf(reservationItem.getContactNumber());
+			reservationItem.getTable().setVacant(true);
+			it.remove();
+			System.out.println("Reservation for "+removed_name +" with contact: "+removed_contact+" has been removed");
+			contains = true;
+		    }
+		}
+		if (contains==false) {
+			System.out.println("Contact does not Exist. No Reservation Removed");
+		}
 	}
 	
 	public static void editReservationItem(int contact) {
