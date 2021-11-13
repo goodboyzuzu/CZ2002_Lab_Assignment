@@ -1,6 +1,8 @@
 package entity;
 
-public class Food extends MenuItem {
+import java.io.Serializable;
+
+public class Food extends MenuItem implements Serializable{
 
     public enum CourseType {MAIN_COURSE, DESSERT, DRINKS};
 

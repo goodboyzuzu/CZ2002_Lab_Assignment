@@ -1,10 +1,10 @@
 package controller;
 
 import ui.*;
-//Barn Start
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-//Barn end
+
 public class RestaurantController {
 	
 	private MenuUI menuUI;
@@ -27,16 +27,10 @@ public class RestaurantController {
                 orderUI.showOrderOptions();
                 break;
             case 3:
-		//Barn added
-        	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
-        	Date date = new Date();  
-        	System.out.println(formatter.format(date)); 
-            	reservationUI.showReservationOptions();
-            	//Barn end
-                //reservationUI.showReservationOptions();
-		//Barn rmv
-            	//System.out.println("Reservation WIP");
-		//Barn end
+                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
+                Date date = new Date();  
+                System.out.println(formatter.format(date)); 
+                reservationUI.showReservationOptions();
                 break;
             case 99:
             	System.out.println("Terminating program...");

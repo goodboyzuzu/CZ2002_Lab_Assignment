@@ -1,6 +1,8 @@
 package entity;
 
-public abstract class MenuItem {
+import java.io.Serializable;
+
+public abstract class MenuItem implements Serializable{
 	private String name;
     private String desc;
     private double price;

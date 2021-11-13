@@ -1,23 +1,21 @@
 package entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Table {
+public class Table implements Serializable{
     private int size;
     private int tableNumber;
     private boolean isVacant;
-    private Date reservationDate;
-    //Barn added
     private boolean isServing;
-    //Barn end
+    private Date reservationDate;
+
     public Table(int size, int tableNumber){
         this.size = size;
         this.tableNumber = tableNumber;
         this.isVacant = true;
         this.reservationDate = null;
-        //Barn added
-        this.isServing=false;
-        //Barn end
+        this.isServing = false;
     }
 
     public int getSize() {
@@ -31,6 +29,10 @@ public class Table {
     public boolean isVacant() {
         return isVacant;
     }
+    
+    public boolean isServing() {
+        return isServing;
+    }
 
     public Date getReservationDate() {
         return reservationDate;
@@ -40,16 +42,11 @@ public class Table {
         this.reservationDate = reservationDate;
     }
 
-    public void setVacant(boolean vacant) {
-        isVacant = vacant;
+    public void setVacant(boolean isVacant) {
+        this.isVacant = isVacant;
     }
-    //Barn added
-	public boolean isServing() {
-		return isServing;
-	}
-
-	public void setServing(boolean isServing) {
-		this.isServing = isServing;
-	}
-	//Barn end
+    
+    public void setServing(boolean isServing) {
+        this.isServing = isServing;
+    }
 }

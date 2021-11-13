@@ -1,15 +1,19 @@
 package helperFunction;
 
 import entity.*;
+import controller.OrderController;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 //import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import controller.OrderController;
-//Barn added
 import java.util.Calendar;
 import java.util.Date;
-//Barn end
+
 public class PopulateDB {
 	
 	public static ArrayList<Staff> staffArrayList = new ArrayList<Staff>();
@@ -17,10 +21,12 @@ public class PopulateDB {
     public static ArrayList<Table> tableArrayList = new ArrayList<Table>();
     public static ArrayList<Order> orderArrayList = new ArrayList<Order>();
     public static ArrayList<Order> pastOrderArrayList = new ArrayList<Order>();
-    //Barn added
     public static ArrayList<Reservation> reservationArrayList = new ArrayList<Reservation>();
-    //Barn end
 	
+    public PopulateDB() {
+        loadFromDatabase();
+    }
+    
 	public static void populateDB() {
 
         tableArrayList.add(new Table(2,1));
@@ -67,6 +73,12 @@ public class PopulateDB {
         orderArrayList.add(new Order(11,5,5));
         orderArrayList.add(new Order(9,2,8));
         
+        tableArrayList.get(0).setServing(true); //table 1
+        tableArrayList.get(1).setServing(true); //table 2
+        tableArrayList.get(2).setServing(true); //table 3
+        tableArrayList.get(4).setServing(true); //table 5
+        tableArrayList.get(7).setServing(true); //table 8
+        
         orderArrayList.get(0).addItem(meal1);
         orderArrayList.get(0).addItem(coke);
         orderArrayList.get(0).addItem(sugarCane);
@@ -77,23 +89,123 @@ public class PopulateDB {
         orderArrayList.get(4).addItem(chicken);
         orderArrayList.get(4).addItem(kangKong);
         orderArrayList.get(4).addItem(kangKong);
-		
-	//Barn added
+        
+        OrderController.setOrderID(11);
+        
         reservationArrayList.add(new Reservation(tableArrayList.get(0), "Adam", 2, 99999999,new Date()));
         reservationArrayList.add(new Reservation(tableArrayList.get(7), "Bob", 2, 99999998,addSeconds(new Date(),10)));
         reservationArrayList.add(new Reservation(tableArrayList.get(8), "Cece", 9, 99999997,addSeconds(new Date(),30)));
         tableArrayList.get(2).setServing(true);
         reservationArrayList.add(new Reservation(tableArrayList.get(2), "Dick", 4, 99999996,addSeconds(new Date(),10)));
-        //Barn end
         
-        OrderController.setOrderID(11);
+        serialisation();
 	}
-	//Barn added
+	
 	public static Date addSeconds(Date date, Integer seconds) {
-		    Calendar cal = Calendar.getInstance();
-		    cal.setTime(date);
-		    cal.add(Calendar.SECOND, seconds);
-		    return cal.getTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.SECOND, seconds);
+        return cal.getTime();
+}
+	
+    public static void serialisation() {    
+	    // Serialisation
+	    try {
+            FileOutputStream staffFile = new FileOutputStream("staffData.db");
+            ObjectOutputStream staffOut = new ObjectOutputStream(staffFile);
+            FileOutputStream menuItemFile = new FileOutputStream("menuItem.db");
+            ObjectOutputStream menuItemOut = new ObjectOutputStream(menuItemFile);
+            FileOutputStream tableFile = new FileOutputStream("tableData.db");
+            ObjectOutputStream tableOut = new ObjectOutputStream(tableFile);
+            FileOutputStream orderFile = new FileOutputStream("orderData.db");
+            ObjectOutputStream orderOut = new ObjectOutputStream(orderFile);
+            FileOutputStream pastOrderFile = new FileOutputStream("pastOrderData.db");
+            ObjectOutputStream pastOrderOut = new ObjectOutputStream(pastOrderFile);
+            FileOutputStream reservationFile = new FileOutputStream("reservationData.db");
+            ObjectOutputStream reservationOut = new ObjectOutputStream(reservationFile);
+            FileOutputStream orderIDFile = new FileOutputStream("orderID.db");
+            ObjectOutputStream orderIDOut = new ObjectOutputStream(orderIDFile);
+    
+            staffOut.writeObject(staffArrayList);
+            menuItemOut.writeObject(menuItemArrayList);
+            tableOut.writeObject(tableArrayList);
+            orderOut.writeObject(orderArrayList);
+            pastOrderOut.writeObject(pastOrderArrayList);
+            reservationOut.writeObject(reservationArrayList);
+            orderIDOut.writeObject(OrderController.getOrderID());
+    
+            staffOut.close();
+            staffFile.close();
+            menuItemOut.close();
+            menuItemFile.close();
+            tableOut.close();
+            tableFile.close();
+            orderOut.close();
+            orderFile.close();
+            pastOrderOut.close();
+            pastOrderFile.close();
+            reservationOut.close();
+            reservationFile.close();
+            orderIDOut.close();
+            orderIDFile.close();
+	    }
+	    
+	    catch (FileNotFoundException e) {
+	        System.out.println("FileNotFoundException is caught");
+	    }
+	    catch (IOException e) {
+	        System.out.println("IOException is caught");
+	    }
 	}
-	//Barn end
+	
+	public static void loadFromDatabase() {
+        try {
+            FileInputStream staffFile = new FileInputStream("staffData.db");
+            ObjectInputStream staffIn = new ObjectInputStream(staffFile);
+            staffArrayList = (ArrayList<Staff>) staffIn.readObject();
+            staffFile.close();
+            staffIn.close();
+            
+            FileInputStream menuItemFile = new FileInputStream("menuItem.db");
+            ObjectInputStream menuItemIn = new ObjectInputStream(menuItemFile);
+            menuItemArrayList = (ArrayList<MenuItem>) menuItemIn.readObject();
+            menuItemFile.close();
+            menuItemIn.close();
+            
+            FileInputStream tableFile = new FileInputStream("tableData.db");
+            ObjectInputStream tableIn = new ObjectInputStream(tableFile);
+            tableArrayList = (ArrayList<Table>) tableIn.readObject();
+            tableFile.close();
+            tableIn.close();
+            
+            FileInputStream orderFile = new FileInputStream("orderData.db");
+            ObjectInputStream orderIn = new ObjectInputStream(orderFile);
+            orderArrayList = (ArrayList<Order>) orderIn.readObject();
+            orderFile.close();
+            orderIn.close();
+            
+            FileInputStream pastOrderFile = new FileInputStream("pastOrderData.db");
+            ObjectInputStream pastOrderIn = new ObjectInputStream(pastOrderFile);
+            pastOrderArrayList = (ArrayList<Order>) pastOrderIn.readObject();
+            pastOrderFile.close();
+            pastOrderIn.close();
+            
+            FileInputStream reservationFile = new FileInputStream("reservationData.db");
+            ObjectInputStream reservationIn = new ObjectInputStream(reservationFile);
+            reservationArrayList = (ArrayList<Reservation>) reservationIn.readObject();
+            reservationFile.close();
+            reservationIn.close();
+            
+            FileInputStream orderIDFile = new FileInputStream("orderID.db");
+            ObjectInputStream orderIDIn = new ObjectInputStream(orderIDFile);
+            OrderController.setOrderID((Integer) orderIDIn.readObject());
+            orderIDFile.close();
+            orderIDIn.close();
+
+        } catch (IOException ex) {
+            System.out.println("IOException is caught");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("ClassNotFoundException is caught");
+        }
+    }
 }

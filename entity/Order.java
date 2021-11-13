@@ -1,15 +1,16 @@
 package entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 //import java.util.Calendar;
-//import java.util.Date;
+import java.util.Date;
 
-public class Order {
+public class Order implements Serializable{
     private int orderId;
     private int staffId;
     private int tableNo;
-    //private Date timestamp = new Date();
-    private double finalTotal; //after GST
+    private Date orderDate;
+    private double finalTotal; //including service charge and GST
     private ArrayList<MenuItem> foodList = new ArrayList<MenuItem>();
     
     public Order(int orderId, int staffId, int tableNo) {
@@ -30,9 +31,9 @@ public class Order {
         return tableNo;
     }
     
-    //public Date getDate() {
-    //    return timestamp;
-    //}
+    public Date getDate() {
+        return orderDate;
+    }
     
     public double getFinalTotal() {
         return finalTotal;
@@ -66,6 +67,10 @@ public class Order {
         }
         
         if(!removed) System.out.println("Item does not exist in order");
+    }
+    
+    public void setDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
     
     public void setFinalTotal(double finalTotal) {
