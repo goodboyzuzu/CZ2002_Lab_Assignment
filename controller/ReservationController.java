@@ -20,7 +20,7 @@ import helperFunction.PopulateDB;
 
 // Barn added
 public class ReservationController {
-	public static final long MAX_RESERVATION_DURATION=5; //seconds
+	public static final long MAX_RESERVATION_DURATION=60*5; //seconds
 	public static ArrayList<Reservation> reservationArrayList = PopulateDB.reservationArrayList;
     public static ArrayList<Table> tableArrayList =PopulateDB.tableArrayList;
     
