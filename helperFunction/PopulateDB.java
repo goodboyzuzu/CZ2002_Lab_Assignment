@@ -6,7 +6,10 @@ import entity.*;
 import java.util.ArrayList;
 
 import controller.OrderController;
-
+//Barn added
+import java.util.Calendar;
+import java.util.Date;
+//Barn end
 public class PopulateDB {
 	
 	public static ArrayList<Staff> staffArrayList = new ArrayList<Staff>();
@@ -14,6 +17,9 @@ public class PopulateDB {
     public static ArrayList<Table> tableArrayList = new ArrayList<Table>();
     public static ArrayList<Order> orderArrayList = new ArrayList<Order>();
     public static ArrayList<Order> pastOrderArrayList = new ArrayList<Order>();
+    //Barn added
+    public static ArrayList<Reservation> reservationArrayList = new ArrayList<Reservation>();
+    //Barn end
 	
 	public static void populateDB() {
 
@@ -71,7 +77,23 @@ public class PopulateDB {
         orderArrayList.get(4).addItem(chicken);
         orderArrayList.get(4).addItem(kangKong);
         orderArrayList.get(4).addItem(kangKong);
+		
+	//Barn added
+        reservationArrayList.add(new Reservation(tableArrayList.get(0), "Adam", 2, 99999999,new Date()));
+        reservationArrayList.add(new Reservation(tableArrayList.get(7), "Bob", 2, 99999998,addSeconds(new Date(),10)));
+        reservationArrayList.add(new Reservation(tableArrayList.get(8), "Cece", 9, 99999997,addSeconds(new Date(),30)));
+        tableArrayList.get(2).setServing(true);
+        reservationArrayList.add(new Reservation(tableArrayList.get(2), "Dick", 4, 99999996,addSeconds(new Date(),10)));
+        //Barn end
         
         OrderController.setOrderID(11);
 	}
+	//Barn added
+	public static Date addSeconds(Date date, Integer seconds) {
+		    Calendar cal = Calendar.getInstance();
+		    cal.setTime(date);
+		    cal.add(Calendar.SECOND, seconds);
+		    return cal.getTime();
+	}
+	//Barn end
 }
