@@ -24,8 +24,16 @@ public class RestaurantController {
                 orderUI.showOrderOptions();
                 break;
             case 3:
+		//Barn added
+        	SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
+        	Date date = new Date();  
+        	System.out.println(formatter.format(date)); 
+            	reservationUI.showReservationOptions();
+            	//Barn end
                 //reservationUI.showReservationOptions();
-            	System.out.println("Reservation WIP");
+		//Barn rmv
+            	//System.out.println("Reservation WIP");
+		//Barn end
                 break;
             case 99:
             	System.out.println("Terminating program...");
