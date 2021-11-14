@@ -2,6 +2,7 @@ package helperFunction;
 
 import entity.*;
 import controller.OrderController;
+import controller.ReservationController;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,15 +18,32 @@ import java.util.Date;
 public class PopulateDB {
 	
 	public static ArrayList<Staff> staffArrayList = new ArrayList<Staff>();
+	//public static ArrayList<MenuItem> menuItemArrayList;
+	//public ArrayList<MenuItem> menuItemArrayList2 = new ArrayList<MenuItem>();
     public static ArrayList<MenuItem> menuItemArrayList = new ArrayList<MenuItem>();
     public static ArrayList<Table> tableArrayList = new ArrayList<Table>();
     public static ArrayList<Order> orderArrayList = new ArrayList<Order>();
     public static ArrayList<Order> pastOrderArrayList = new ArrayList<Order>();
     public static ArrayList<Reservation> reservationArrayList = new ArrayList<Reservation>();
 	
-    public PopulateDB() {
-        loadFromDatabase();
-    }
+    //public PopulateDB() {
+    //    loadFromDatabase();
+    //}
+    
+    /*public void loadFile() {
+        try {
+        FileInputStream menuItemFile = new FileInputStream("menuItem.db");
+        ObjectInputStream menuItemIn = new ObjectInputStream(menuItemFile);
+        menuItemArrayList2 = (ArrayList<MenuItem>) menuItemIn.readObject();
+        menuItemFile.close();
+        menuItemIn.close();
+        
+        } catch (IOException ex) {
+            System.out.println("IOException is caught");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("ClassNotFoundException is caught");
+        }
+    }*/
     
 	public static void populateDB() {
 
@@ -90,13 +108,27 @@ public class PopulateDB {
         orderArrayList.get(4).addItem(kangKong);
         orderArrayList.get(4).addItem(kangKong);
         
-        OrderController.setOrderID(11);
+        OrderController.setOrderID(12);
         
-        reservationArrayList.add(new Reservation(tableArrayList.get(0), "Adam", 2, 99999999,new Date()));
-        reservationArrayList.add(new Reservation(tableArrayList.get(7), "Bob", 2, 99999998,addSeconds(new Date(),10)));
-        reservationArrayList.add(new Reservation(tableArrayList.get(8), "Cece", 9, 99999997,addSeconds(new Date(),30)));
-        tableArrayList.get(2).setServing(true);
-        reservationArrayList.add(new Reservation(tableArrayList.get(2), "Dick", 4, 99999996,addSeconds(new Date(),10)));
+        //ReservationController.addReservationItem("Adam", 99999999, 2, new Date());
+        //ReservationController.addReservationItem("Bob", 99999998, 2, addSeconds(new Date(),10));
+        //ReservationController.addReservationItem("Cece", 99999997, 9, addSeconds(new Date(),30));
+        //ReservationController.addReservationItem("Dick", 99999996, 4, addSeconds(new Date(),10));
+        
+//        reservationArrayList.add(new Reservation(tableArrayList.get(0), "Adam", 2, 99999999,new Date()));
+//        reservationArrayList.add(new Reservation(tableArrayList.get(7), "Bob", 2, 99999998,addSeconds(new Date(),10)));
+//        reservationArrayList.add(new Reservation(tableArrayList.get(8), "Cece", 9, 99999997,addSeconds(new Date(),10)));
+//        reservationArrayList.add(new Reservation(tableArrayList.get(4), "Dick", 4, 99999996,addSeconds(new Date(),10)));
+        
+        tableArrayList.get(0).setVacant(false);
+        tableArrayList.get(7).setVacant(false);
+        tableArrayList.get(8).setVacant(false);
+        tableArrayList.get(2).setVacant(false);
+        reservationArrayList.add(new Reservation(1, "Adam", 2, 99999999,new Date()));
+        reservationArrayList.add(new Reservation(8, "Bob", 2, 99999998,addSeconds(new Date(),10)));
+        reservationArrayList.add(new Reservation(9, "Cece", 9, 99999997,addSeconds(new Date(),30)));
+        //tableArrayList.get(2).setServing(true);
+        reservationArrayList.add(new Reservation(3, "Dick", 4, 99999996,addSeconds(new Date(),10)));
         
         serialisation();
 	}
@@ -208,4 +240,62 @@ public class PopulateDB {
             System.out.println("ClassNotFoundException is caught");
         }
     }
+	
+	public static void saveToDatabase() {
+	    try {
+	        FileOutputStream staffFile = new FileOutputStream("staffData.db");
+            ObjectOutputStream staffOut = new ObjectOutputStream(staffFile);
+
+            staffOut.writeObject(staffArrayList);
+	        
+            FileOutputStream menuItemFile = new FileOutputStream("menuItem.db");
+            ObjectOutputStream menuItemOut = new ObjectOutputStream(menuItemFile);
+
+            menuItemOut.writeObject(tableArrayList);
+            
+	        FileOutputStream tableFile = new FileOutputStream("tableData.db");
+            ObjectOutputStream tableOut = new ObjectOutputStream(tableFile);
+
+            tableOut.writeObject(tableArrayList);
+            
+            FileOutputStream orderFile = new FileOutputStream("orderData.db");
+            ObjectOutputStream orderOut = new ObjectOutputStream(orderFile);
+
+            orderOut.writeObject(orderArrayList);
+            
+            FileOutputStream pastOrderFile = new FileOutputStream("pastOrderData.db");
+            ObjectOutputStream pastOrderOut = new ObjectOutputStream(pastOrderFile);
+
+            pastOrderOut.writeObject(pastOrderArrayList);
+            
+            FileOutputStream reservationFile = new FileOutputStream("reservationData.db");
+            ObjectOutputStream reservationOut = new ObjectOutputStream(reservationFile);
+
+            reservationOut.writeObject(reservationArrayList);
+            
+            FileOutputStream orderIDFile = new FileOutputStream("orderID.db");
+            ObjectOutputStream orderIDOut = new ObjectOutputStream(orderIDFile);
+
+            int orderID = 0;
+            orderIDOut.writeObject(orderID);
+            OrderController.setOrderID(orderID);
+            
+            staffOut.close();
+            staffFile.close();
+            menuItemOut.close();
+            menuItemFile.close();
+            tableOut.close();
+            tableFile.close();
+            orderOut.close();
+            orderFile.close();
+            pastOrderOut.close();
+            pastOrderFile.close();
+            reservationOut.close();
+            reservationFile.close();
+            orderIDOut.close();
+            orderIDFile.close();
+        } catch (IOException ex) {
+            System.out.println("IOException is caught");
+        }
+	}
 }

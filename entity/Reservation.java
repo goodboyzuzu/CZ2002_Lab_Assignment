@@ -5,7 +5,8 @@ import java.util.Date;
 
 public class Reservation implements Serializable {
 
-    private Table table;
+    //private Table table;
+    private int tableNum;
     
     private String name;
     private int pax;
@@ -13,18 +14,22 @@ public class Reservation implements Serializable {
     private int contactNumber;
     private Date reservationDate;
     
-    public Reservation(Table table, String name, int pax, int contactNumber,Date reservationDate){
-        this.table = table;
+    //public Reservation(Table table, String name, int pax, int contactNumber,Date reservationDate){
+    //    this.table = table;
+    public Reservation(int tableNum, String name, int pax, int contactNumber,Date reservationDate){    
+        this.tableNum = tableNum;
         this.name = name;
         this.pax = pax;
         this.contactNumber = contactNumber;
         this.reservationDate = reservationDate;
-        table.setVacant(false);
+        //table.setVacant(false);
     }
     
-    public Table getTable() {
+    
+    
+    /*public Table getTable() {
         return table;
-    }
+    }*/
 
     public int getPax() {
         return pax;
@@ -40,9 +45,11 @@ public class Reservation implements Serializable {
     public Date getReservationDate() {
         return reservationDate;
     }
-    public void setTable(Table table) {
+    
+    /*public void setTable(Table table) {
         this.table = table;
-    }
+    }*/
+    
     public void setPax(int pax) {
         this.pax = pax;
     }
@@ -60,7 +67,13 @@ public class Reservation implements Serializable {
         this.reservationDate = reservationDate;
     }
     
-    
+    public int getTableNum() {
+        return tableNum;
+    }
+
+    public void setTableNum(int tableNum) {
+        this.tableNum = tableNum;
+    }
     
 
 

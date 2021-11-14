@@ -19,11 +19,50 @@ import java.util.Scanner;
 public class MenuController {
 	
     private static String menuItemFileName = "menuItem.db";
-	public static ArrayList<MenuItem> menuItemList = PopulateDB.menuItemArrayList;
+    public static ArrayList<MenuItem> menuItemList = PopulateDB.menuItemArrayList;
+	//public static ArrayList<MenuItem> menuItemList2;
 	
 	public MenuController() {
+	    //menuItemList = PopulateDB.menuItemArrayList;
 	    loadFromDatabase();
 	}
+	
+	/*public static void showDatabaseMenuItem() {
+	    System.out.println(PopulateDB.menuItemArrayList.get(0).getName());
+	    menuItemList = PopulateDB.menuItemArrayList;
+	    System.out.println(menuItemList.get(0).getName());
+	    
+	    try {
+            FileInputStream menuItemFile = new FileInputStream(menuItemFileName);
+            ObjectInputStream menuItemIn = new ObjectInputStream(menuItemFile);
+            menuItemList2 = (ArrayList<MenuItem>) menuItemIn.readObject();
+
+            menuItemFile.close();
+            menuItemIn.close();
+
+        } catch (IOException ex) {
+            System.out.println("IOException is caught");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("ClassNotFoundException is caught");
+        }
+	    
+	    List<List<String>> rows = new ArrayList<>();
+        List<String> header = Arrays.asList("Category2", "Name", "Description", "Price", "Course","Food in package");
+        rows.add(header);
+        for (MenuItem item : menuItemList2) {
+            if (!(item instanceof Food)) {
+                rows.add(Arrays.asList("Package", item.getName(), item.getDesc(), String.format("%.2f",item.getPrice()), "-",((PromotionalPackage)item).getFoodString()));
+            }
+        }
+        for (MenuItem item : menuItemList2) {
+            if (item instanceof Food) {
+                Food foodItem = (Food) item;
+                List<String> body = Arrays.asList("Food", foodItem.getName(), foodItem.getDesc(), String.format("%.2f",foodItem.getPrice()), String.valueOf(foodItem.getCourseType()),"-");
+                rows.add(body);
+            }
+        }
+        System.out.println(formatAsTable(rows));
+    }*/
 	
 	public static void showMenuItem() {
         List<List<String>> rows = new ArrayList<>();
@@ -84,12 +123,12 @@ public class MenuController {
 	        boolean isMenuItem = false;
 	        for (MenuItem item : menuItemList) {
 	            if (item.getName().equals(foodName)) {
-	            	System.out.println(foodName);
+	            	System.out.println(foodName + " added to package");
 	                promo.addItem((Food) item);
 	                isMenuItem = true;
 	            }
 	        }
-	        if(!isMenuItem) System.out.println("Food not found in menu");
+	        if(!isMenuItem && !(foodName.equals("quit"))) System.out.println("Food not found in menu");
 	    } while (!(foodName.equals("quit")));
 	    menuItemList.add(promo);
 	    

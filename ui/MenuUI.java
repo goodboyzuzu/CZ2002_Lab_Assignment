@@ -41,6 +41,9 @@ public class MenuUI {
     			case 5:
     				editMenuItem();
     				break;
+    			//case 6:
+    			//    menuCtrl.showDatabaseMenuItem();
+    			//    break;
     			case 99:
     				break;
     			default:

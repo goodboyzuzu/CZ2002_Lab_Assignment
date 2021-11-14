@@ -13,6 +13,7 @@ import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.InputMismatchException;
@@ -30,6 +31,7 @@ public class OrderController {
     public static ArrayList<Order> pastOrderList = PopulateDB.pastOrderArrayList;
     public static ArrayList<Table> tableList = PopulateDB.tableArrayList;
     public static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
+    public static SimpleDateFormat monthFormatter = new SimpleDateFormat("MM/yyyy");
     
     public OrderController() {
         loadFromDatabase();
@@ -89,7 +91,7 @@ public class OrderController {
         }
         Collections.sort(tableList);
         for(Integer tableNo : tableList) {
-            System.out.println("Table " + tableNo);
+            System.out.println(tableNo);
         }
     }
     
@@ -216,7 +218,6 @@ public class OrderController {
     }
     
     public static void printOrderInvoice(int tableNo, boolean isMember) {
-        Scanner sc = new Scanner(System.in);
         
         try {
             boolean hasOrder = false;
@@ -252,6 +253,7 @@ public class OrderController {
             rows.add(Arrays.asList("",""));
             rows.add(Arrays.asList("Subtotal", String.format("%.2f",orderList.get(index).getTotalPrice())));
             double discount = 0;
+            orderList.get(index).setMember(isMember);
             if (isMember) {
                 discount = orderList.get(index).getTotalPrice() * 0.05;
                 rows.add(Arrays.asList("Membership Discount","-"+String.format("%.2f", discount)));
@@ -268,7 +270,10 @@ public class OrderController {
             orderList.get(index).setFinalTotal(finalTotal);
             pastOrderList.add(orderList.get(index));
             orderList.remove(index);
-            tableList.get(tableNo-1).setServing(false);
+            
+            ReservationController.findTablebyNo(tableNo).setServing(false);
+            ReservationController.findTablebyNo(tableNo).setVacant(true);
+            
             saveToDatabase();
         }
         
@@ -286,6 +291,127 @@ public class OrderController {
             periodTotal += order.getFinalTotal();
         }
         System.out.format("%.2f\n",periodTotal);
+        
+        int invoiceChoice = 0;
+        Scanner sc = new Scanner(System.in);
+        
+        do {
+            try {
+                System.out.println("Select the Sales Report period");
+                System.out.println("(1) Sales Report by day");
+                System.out.println("(2) Sales Report by month");
+                System.out.println("(99) Go back");
+                
+                invoiceChoice = sc.nextInt();
+                sc.nextLine();
+                switch(invoiceChoice) {
+                case 1:
+                    try {
+                        System.out.println("Enter the month in format DD/MM/YYYY");
+                        String dayRequest = sc.nextLine();
+                        Date dayReport = dateFormatter.parse(dayRequest);
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(dayReport);
+                        Calendar dayCalendar = cal;
+                        
+                        double dayRevenue = 0;
+                        for (Order pastOrder : pastOrderList) {
+                            Calendar pastCal = Calendar.getInstance();
+                            pastCal.setTime(pastOrder.getDate());
+                            Calendar pastOrderCalendar = pastCal;
+                            
+                            if(dayCalendar.get(Calendar.DAY_OF_MONTH) == pastOrderCalendar.get(Calendar.DAY_OF_MONTH) && dayCalendar.get(Calendar.MONTH) == pastOrderCalendar.get(Calendar.MONTH) && dayCalendar.get(Calendar.YEAR) == pastOrderCalendar.get(Calendar.YEAR)) {
+                                printPastOrder(pastOrder);
+                                dayRevenue += pastOrder.getFinalTotal();
+                            }
+                        }
+                        System.out.format("Total Revenue: %.2f\n", dayRevenue);
+                    }
+                    
+                    catch (InputMismatchException e) {
+                        System.out.println("Invalid Input");
+                    }
+                    catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 2:
+                    try {
+                        System.out.println("Enter the month in format MM/YYYY");
+                        String monthRequest = sc.nextLine();
+                        Date monthReport = monthFormatter.parse(monthRequest);
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(monthReport);
+                        Calendar monthCalendar = cal;
+                        
+                        double monthRevenue = 0;
+                        for (Order pastOrder : pastOrderList) {
+                            Calendar pastCal = Calendar.getInstance();
+                            pastCal.setTime(pastOrder.getDate());
+                            Calendar pastOrderCalendar = pastCal;
+                            
+                            if(monthCalendar.get(Calendar.MONTH) == pastOrderCalendar.get(Calendar.MONTH) && monthCalendar.get(Calendar.YEAR) == pastOrderCalendar.get(Calendar.YEAR)) {
+                                printPastOrder(pastOrder);
+                                monthRevenue += pastOrder.getFinalTotal();
+                            }
+                        }
+                        System.out.format("Total Revenue: %.2f\n", monthRevenue);
+                    }
+                    
+                    catch (InputMismatchException e) {
+                        System.out.println("Invalid Input");
+                    }
+                    catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 99:
+                    break;
+                default:
+                    System.out.println("Please input a different number\n");
+                }
+            }
+            
+            catch(InputMismatchException e) {
+                System.out.println("Please input an integer\n");
+                sc.nextLine();
+            }
+            catch(Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } while (invoiceChoice != 99);
+    }
+    
+    private static void printPastOrder(Order pastOrder) {
+        System.out.println("Receipt No: " + pastOrder.getOrderID());
+        int staffID = pastOrder.getStaffID();            
+        System.out.println("Served by: " + StaffController.getNameFromID(staffID));
+        System.out.println("Date: " + dateFormatter.format(pastOrder.getDate()));
+        System.out.println("");
+        
+        List<List<String>> rows = new ArrayList<>();
+        List<String> header = Arrays.asList("Name", "Price");
+        rows.add(header);
+        ArrayList<MenuItem> foodList = pastOrder.getFoodList();
+        for (MenuItem item : foodList) {
+                rows.add(Arrays.asList(item.getName(), String.format("%.2f",item.getPrice())));
+        }
+        
+        rows.add(Arrays.asList("",""));
+        rows.add(Arrays.asList("Subtotal", String.format("%.2f",pastOrder.getTotalPrice())));
+        double discount = 0;
+        if (pastOrder.isMember()) {
+            discount = pastOrder.getTotalPrice() * 0.05;
+            rows.add(Arrays.asList("Membership Discount","-"+String.format("%.2f", discount)));
+        }
+        double serviceCharge = (pastOrder.getTotalPrice() - discount) * 0.1;
+        rows.add(Arrays.asList("Service Charge (10%)",String.format("%.2f", serviceCharge)));
+        double tax = (pastOrder.getTotalPrice() - discount + serviceCharge) * 0.07;
+        rows.add(Arrays.asList("GST (7%)",String.format("%.2f", tax)));
+        double finalTotal = pastOrder.getTotalPrice() - discount + serviceCharge + tax;
+        rows.add(Arrays.asList("Total (SGD)",String.format("%.2f", finalTotal)));
+        
+        System.out.println(formatAsTable(rows));
     }
     
     private static void loadFromDatabase() {

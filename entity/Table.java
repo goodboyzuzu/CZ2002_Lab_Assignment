@@ -42,11 +42,11 @@ public class Table implements Serializable{
         this.reservationDate = reservationDate;
     }
 
-    public void setVacant(boolean isVacant) {
-        this.isVacant = isVacant;
+    public void setVacant(boolean vacant) {
+        isVacant = vacant;
     }
     
-    public void setServing(boolean isServing) {
-        this.isServing = isServing;
+    public void setServing(boolean serving) {
+        isServing = serving;
     }
 }

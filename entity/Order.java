@@ -10,6 +10,7 @@ public class Order implements Serializable{
     private int staffId;
     private int tableNo;
     private Date orderDate;
+    private boolean isMember;
     private double finalTotal; //including service charge and GST
     private ArrayList<MenuItem> foodList = new ArrayList<MenuItem>();
     
@@ -33,6 +34,10 @@ public class Order implements Serializable{
     
     public Date getDate() {
         return orderDate;
+    }
+    
+    public boolean isMember() {
+        return isMember;
     }
     
     public double getFinalTotal() {
@@ -71,6 +76,10 @@ public class Order implements Serializable{
     
     public void setDate(Date orderDate) {
         this.orderDate = orderDate;
+    }
+    
+    public void setMember(boolean isMember) {
+        this.isMember = isMember;
     }
     
     public void setFinalTotal(double finalTotal) {

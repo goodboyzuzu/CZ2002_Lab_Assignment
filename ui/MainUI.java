@@ -13,11 +13,15 @@ public class MainUI {
 	public static void main (String[] args) {
 		
 	    //PopulateDB.populateDB(); //remove comment block once when running program for first time or to reset data
-		
+	    
 	    PopulateDB.loadFromDatabase();
+	    
 	    
 		Scanner sc = new Scanner(System.in);
 		int appChoice = 0;
+		
+		//MenuController.showDatabaseMenuItem();
+		//System.out.println(PopulateDB.menuItemArrayList.get(0).getName());
 		
 		do{
 		    try {

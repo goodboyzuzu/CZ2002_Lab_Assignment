@@ -1,6 +1,7 @@
 package controller;
 
 import ui.*;
+import helperFunction.PopulateDB;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,6 +35,7 @@ public class RestaurantController {
                 break;
             case 99:
             	System.out.println("Terminating program...");
+            	//PopulateDB.saveToDatabase();
         		System.exit(1);
             default:
             	System.out.println("Please input a different number\n");
