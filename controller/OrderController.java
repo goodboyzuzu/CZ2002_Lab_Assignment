@@ -26,10 +26,12 @@ public class OrderController {
     private static String orderFileName = "orderData.db";
     private static String pastOrderFileName = "pastOrderData.db";
     private static String tableFileName = "tableData.db";
+    private static String reservationFileName = "reservationData.db";
     public static ArrayList<MenuItem> menuItemList = PopulateDB.menuItemArrayList;
     public static ArrayList<Order> orderList = PopulateDB.orderArrayList;
     public static ArrayList<Order> pastOrderList = PopulateDB.pastOrderArrayList;
     public static ArrayList<Table> tableList = PopulateDB.tableArrayList;
+    public static ArrayList<Reservation> reservationList = PopulateDB.reservationArrayList;
     public static SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
     public static SimpleDateFormat monthFormatter = new SimpleDateFormat("MM/yyyy");
     
@@ -273,6 +275,12 @@ public class OrderController {
             
             ReservationController.findTablebyNo(tableNo).setServing(false);
             ReservationController.findTablebyNo(tableNo).setVacant(true);
+            int contact = 0;
+            for (Reservation reservation : reservationList) {
+                if (reservation.getTableNum() == tableNo)
+                    contact = reservation.getContactNumber();
+            }
+            ReservationController.removeReservationItem(contact);
             
             saveToDatabase();
         }
@@ -286,11 +294,11 @@ public class OrderController {
     }
     
     public static void printSalesReport() {
-        double periodTotal = 0;
-        for(Order order : pastOrderList) {
-            periodTotal += order.getFinalTotal();
-        }
-        System.out.format("%.2f\n",periodTotal);
+//        double periodTotal = 0;
+//        for(Order order : pastOrderList) {
+//            periodTotal += order.getFinalTotal();
+//        }
+//        System.out.format("%.2f\n",periodTotal);
         
         int invoiceChoice = 0;
         Scanner sc = new Scanner(System.in);
@@ -440,6 +448,12 @@ public class OrderController {
             pastOrderFile.close();
             pastOrderIn.close();
             
+            FileInputStream reservationFile = new FileInputStream(reservationFileName);
+            ObjectInputStream reservationIn = new ObjectInputStream(reservationFile);
+            reservationList = (ArrayList<Reservation>) reservationIn.readObject();
+            reservationFile.close();
+            reservationIn.close();
+            
             FileInputStream orderIDFile = new FileInputStream("orderID.db");
             ObjectInputStream orderIDIn = new ObjectInputStream(orderIDFile);
             OrderController.setOrderID((Integer) orderIDIn.readObject());
@@ -469,6 +483,11 @@ public class OrderController {
             ObjectOutputStream pastOrderOut = new ObjectOutputStream(pastOrderFile);
 
             pastOrderOut.writeObject(pastOrderList);
+            
+            FileOutputStream reservationFile = new FileOutputStream(reservationFileName);
+            ObjectOutputStream reservationOut = new ObjectOutputStream(reservationFile);
+
+            reservationOut.writeObject(reservationList);
             
             FileOutputStream orderIDFile = new FileOutputStream("orderID.db");
             ObjectOutputStream orderIDOut = new ObjectOutputStream(orderIDFile);
